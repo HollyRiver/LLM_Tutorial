@@ -1,2 +1,11 @@
 # LLM_Tutorial
-Environment Setting, Fine Tuning, Preference Optimization, vLLM Inference
+
+**Llama를 중심으로 한 LLM의 전반적 사용법을 담은 리포지토리**
+
+## 포함 내용
+
+* 가상 환경 세팅과 이를 위한 도커 파일
+* 특정 목적을 위한 Llama 3.1 8B의 전반적인 파인튜닝 코드 (SFT + DPO)
+* vLLM의 유동 배치를 활용한 빠른 추론 코드
+
+> 모든 코드는 단일 GPU 환경에서 구동되도록 만들어졌으나, 아주 약간만 손보면 Multi-GPU에서의 가속화가 가능하도록 설계되었습니다.

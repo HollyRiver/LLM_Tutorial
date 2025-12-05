@@ -1,0 +1,7 @@
+*.json
+*.safetensors
+**/base_model
+**/results
+**/data
+**/logs
+**/adapter
