@@ -4,16 +4,16 @@ dataset_path: "./data"                                     ## 데이터셋 저�
 
 ## SFTConfig
 max_length: 1024                                      ## 모델이 수용 가능한 최대 시퀀스 길이. 너무 긴 시퀀스가 일부라면 이를 잘 조절하여 truncation할 수 있음.
-output_dir: "./results/SFT_Adapter"                   ## 튜닝된 모델 저장 위치
+output_dir: "./adapter/SFT_Adapter"                   ## 튜닝된 모델 저장 위치
 report_to: "wandb"                                    ## 튜닝 로그 리포트 (토큰 등록 필요)
 assistant_only_loss: true                             ## LM type dataset: 현재 손실 계산 시 LLM이 답변할 부분만 사용 (user, system messages 무시)
-learning_rate: 2e-5                                   ## update matrix 학습률. 토큰 길이에 따라 1e-4를 표준으로 감소시키며 확인
+learning_rate: 1e-5                                   ## update matrix 학습률. 토큰 길이에 따라 1e-4를 표준으로 감소시키며 확인
 lr_scheduler_type: "cosine_with_restarts"             ## 코사인 스케줄러 사용 + 학습률 초기화
 lr_scheduler_kwargs:
   num_cycles: 3                                       ## 코사인 곡선 사이클 횟수 지정
 num_train_epochs: 6                                   ## 에폭
-per_device_train_batch_size: 8                        ## GPU당 배치 사이즈
-per_device_eval_batch_size: 8                         ## GPU당 배치 사이즈(평가)
+per_device_train_batch_size: 4                        ## GPU당 배치 사이즈
+per_device_eval_batch_size: 4                         ## GPU당 배치 사이즈(평가)
 gradient_accumulation_steps: 2                        ## 그래디언트를 모아두었다가 한꺼번에 적용: 배치 사이즈를 키우는 효과
 do_eval: true                                         ## evaluation loss 계산 (전체 eval dataset을 대상으로 산출하므로, 꽤 많은 시간이 소요됨.)
 eval_steps: 500
