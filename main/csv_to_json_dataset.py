@@ -7,6 +7,7 @@ from utils import remove_hangul
 csv 파일을 json 포맷의 SFT/DPO/Inference dataset으로 변환하기 위한 코드
 시스템 프롬프트는 txt 파일로 저장되어 입력됩니다. 프롬프트를 변경하고 싶으면 해당 파일을 수정하세요.
 
+
 SFT csv dataset input format:
     SFT 작업 수행에 필요한 데이터셋의 csv 포맷
 
@@ -38,6 +39,7 @@ if __name__ == "__main__":
     parser.add_argument("--target", type = str, default = None, help = "변환할 csv 파일 위치")
     parser.add_argument("--encoding", type = str, default = "utf-8", help = "변환할 파일 인코딩")
     parser.add_argument("--system", type = str, default = "data/system_prompt.txt", help = "시스템 프롬프트 기재 txt 파일 위치")
+    parser.add_argument("--test_size", type = float, default = 0.1, help = "전체 대비 test dataset의 비율 (SFT/DPO 데이터셋 생성 시에만 활용)")
 
     args = parser.parse_args()
 
@@ -67,7 +69,7 @@ if __name__ == "__main__":
     
         train_ds = train_ds.map(remove_columns = columns_to_remove, batched = False)
         train_ds = train_ds.map(lambda sample: remove_hangul(sample, column = "messages"))
-        train_ds = train_ds.train_test_split(test_size = 0.1, seed = 42)
+        train_ds = train_ds.train_test_split(test_size = args.test_size, seed = 42)
 
         train_ds["train"].to_json("data/sft_train_dataset.json", orient = "records")
         train_ds["test"].to_json("data/sft_test_dataset.json", orient = "records")
@@ -98,7 +100,7 @@ if __name__ == "__main__":
 
         train_ds = train_ds.map(lambda sample: remove_hangul(sample, column = "prompt"))
         train_ds = train_ds.map(remove_columns = columns_to_remove, batched = False)
-        train_ds = train_ds.train_test_split(test_size = 0.1, seed = 42)
+        train_ds = train_ds.train_test_split(test_size = args.test_size, seed = 42)
 
         train_ds["train"].to_json("data/dpo_train_dataset.json", orient = "records")
         train_ds["test"].to_json("data/dpo_test_dataset.json", orient = "records")

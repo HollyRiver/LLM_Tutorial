@@ -1,10 +1,13 @@
 ## 여기 있는거 한번에 다 안돼요. 성능상 한번에 해도 안되고.
 ## 그리고 실행할 때에는 &&가 아닌 &를 붙여야 합니다. 여긴 그냥 순차적으로 된다는 가정하에 작성했어요.
 
+## 1. 데이터셋 준비
 nohup python csv_to_json_dataset.py --target="data/data_sample_20251111_01.csv"\
                                     --encoding="cp949"\
-                                    --system="data/system_prompt.txt" &&
+                                    --system="data/system_prompt.txt"\
+                                    --test_size=0.1 &&
 
+## 2. SFT Training
 nohup python SFT.py --config config/SFT_config.yaml > sft_log.txt &&
 
 ## SFT에서 온전한 모델을 픽스하고, 해당 어뎁터를 삽입
@@ -25,7 +28,8 @@ nohup python gen_llama_nf4.py &&
 
 nohup python csv_to_json_dataset.py --target="data/data_all.csv"\
                                     --encoding="utf-8"\
-                                    --system="data/system_prompt.txt" &&
+                                    --system="data/system_prompt.txt"\
+                                    --test_size=0.1 &&
 
 ## DPO에서 온전한 모델을 픽스하고, 양자화된 base model이 따로 저장되었으며, 추론에 사용할 프롬프트가 준비되었을 때
 nohup python vllm_inference.py --base_model_path="base_model/Llama-3.1-8B-Instruct-nf4"\
